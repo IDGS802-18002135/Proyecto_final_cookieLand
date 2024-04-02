@@ -1,0 +1,48 @@
+{% extends "layout2.html" %} 
+{%import "_macros.html" as macros%}
+{%from "_macros.html" import render_field%}
+{%block content %}  
+
+
+<div class="container">
+    <div class="row">
+    <div class="span3">
+        <form id="formularioMateriaPrima"action="" method="post">
+            {{form.csrf_token }}
+
+            
+            
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    
+            {{macros.input_Form(form.nombreMateriaPrima,class="form-control")}}
+    </div>
+    <div class="span3">
+        {{macros.input_Form(form.proveedor,class="form-control")}}
+    </div>
+            
+    <div class="span3">
+        {{macros.input_Form(form.fecha_entrada,class="form-control")}}
+    </div>        
+    </div>
+    <div clas="row">
+        <div class="span3", border: 1px solid #d66>{{macros.input_Form(form.caducidad,class="form-control")}}</div>
+        
+        
+        <div class="span3">{{macros.input_Form(form.tipoUnidad,class="form-control")}}</div>
+
+        <div class="span3">{{macros.input_Form(form.cantidadExistente,class="form-control")}}
+        </div>
+
+        
+        
+        
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div clas="row">
+        <div class="span3"><input name="ingresar" type="submit" onclick="" name="btn1"></div>
+    </div>
+
+</div>
+{%endblock%}
