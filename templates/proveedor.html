@@ -1,0 +1,87 @@
+{% extends "layout2.html" %} 
+{%import "_macros.html" as macros%}
+{%from "_macros.html" import render_field%}
+{%block content %}  
+
+<div class="container">
+    <div class="row">
+        <form id="formularioProveedor" action="" method="post">
+            {{form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+            <div class="span3">
+                {{macros.input_Form(form.nombreContacto,class="form-control")}}
+            </div>
+            <div class="span3">
+                {{macros.input_Form(form.telefonoContacto,class="form-control")}}
+            </div>
+            <div class="span3">
+                {{macros.input_Form(form.razon_social,class="form-control")}}
+            </div>
+           
+    </div>
+    <div class="row">
+        <div class="span3">
+            {{macros.input_Form(form.direccion,class="form-control")}}
+        </div>
+        <div class="span3">
+            {{macros.input_Form(form.minimo_compra,class="form-control")}}
+        </div>
+        <div class="span3">
+            {{macros.input_Form(form.maximo_compra,class="form-control")}}
+        </div>
+    </div>   
+    <div class="row">
+        <div class="span3">
+            <input name="ingresar" type="submit" onclick="" name="btn1">
+        </div>
+        
+    </div>
+        
+        
+
+
+
+        </form>
+        <div class="row">
+            <table class="table table-triped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Razon social</th>
+                        <th>Nombre de contacto</th>
+                        <th>Teléfono de contacto</th>
+                        <th>Dirección</th>
+                        <th>Mínimo de compra</th>
+                        <th>Máximo de compra</th>
+                        <th></th>
+                        <th></th>
+                        
+                        
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in listaProveedor %}
+                    <tr>
+                        <td>{{ item.razon_social }}</td>
+                        <td>{{ item.nombreContacto }}</td>
+                        <td>{{ item.telefonoContacto }}</td>
+                        <td>{{ item.direccion }}</td>
+                        
+                        <td>{{ item.compra_minimo }}</td>
+                        <td>{{ item.compra_maxima }}</td>
+                        <td><a class="btn btn-danger">eliminar</a></td>
+                        <td><a class="btn btn-warning">modificar</a></td>
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+</div>
+
+
+    
+
+
+{%endblock%}
