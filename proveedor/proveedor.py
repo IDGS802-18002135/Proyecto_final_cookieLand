@@ -1,0 +1,113 @@
+from datetime import date
+from datetime import datetime
+from flask import Flask, request,render_template,Response,redirect,url_for
+from flask_wtf.csrf import CSRFProtect
+from wtforms import SelectMultipleField,BooleanField
+from .forms import ProveedorForms,materiaPrimaCatalogo
+from config import DevelopmentConfig
+from models import db
+from io import open
+from models import Proveedor,Materiaprima,materiaprimacatalogo,proveedor_materia_prima
+
+from wtforms import validators
+from flask import Blueprint
+app=Flask(__name__)
+app.config.from_object(DevelopmentConfig)
+csrf=CSRFProtect()
+
+proveedores= Blueprint('proveedores',__name__,template_folder='./templates',)
+
+@proveedores.route("/proveedor",methods=["GET","POST"])
+def proveedor():
+    listaIngredientes=""
+    listaIngredientes=materiaprimacatalogo.query.all()
+
+    #test=materiaprimacatalogo.query.all()
+    #print("AAAAAAAAAAAAAA")
+    #print(test)
+    print(listaIngredientes)
+    
+    for i in listaIngredientes:
+        # print(i.idMateriaPrima)
+        # print(i.nombreMateriaPrima)
+        a=str(i.idMateriaPrimaCatalogo)
+        b=str(i.nombre)
+        setattr(ProveedorForms, "i"+a , BooleanField(b))
+        
+        
+
+    
+
+
+    listaProveedor=""
+    
+    
+    proveedor_form=ProveedorForms(request.form)
+
+    mp_catalogo_form=materiaPrimaCatalogo(request.form)
+    
+    
+    #  print(i)
+        #proveedor_form.ingredientes.choices += [(i.idMateriaPrima, i.nombreMateriaPrima)]
+
+    if "agregarCatalogo" in request.form:
+        
+        
+
+
+        
+        mpCatalogo=materiaprimacatalogo(
+            nombre=mp_catalogo_form.nombre.data
+        )
+        db.session.add(mpCatalogo)
+        db.session.commit()
+
+        return redirect (url_for('proveedores.proveedor'))
+    
+    
+
+    if request.method=='POST'  and proveedor_form.validate() and "ingresar" in request.form:
+        print("?????????????????")
+        proveedor=Proveedor(
+                            
+                            nombreContacto=proveedor_form.nombreContacto.data,
+                            telefonoContacto=proveedor_form.telefonoContacto.data,
+                            razon_social=proveedor_form.razon_social.data,
+                            direccion=proveedor_form.direccion.data
+                            
+                            )
+        #compra_minimo=proveedor_form.minimo_compra.data,
+                            #compra_maxima=proveedor_form.maximo_compra.data
+        db.session.add(proveedor)
+        db.session.commit()
+        db.session.flush()
+        print("id??: ")
+        print(proveedor.idProveedor)
+
+        print("AQUIIIIIIIIIIIIIIIIIIII")
+        atributos = vars(proveedor_form)
+
+        # Iterar sobre los atributos y sus valores
+        for nombre_atributo, valor_atributo in atributos.items():
+            # Verificar si el nombre del atributo comienza con 'i' seguido de un número
+            if nombre_atributo.startswith('i') and nombre_atributo[1:].isdigit():
+                # Obtener el valor del atributo
+                valor = getattr(proveedor_form, nombre_atributo).data
+                print(f"El valor de {nombre_atributo} es: {valor}")
+                if valor==True:
+                    #inserta en la base
+                    numero=nombre_atributo.split("i") 
+                    proveedorXcatalogomp=proveedor_materia_prima(
+                        idProveedor=proveedor.idProveedor,
+                        idMateriaPrimaCatalogo=numero[1]
+                    )
+                    db.session.add(proveedorXcatalogomp)
+                    db.session.commit()
+
+        return redirect (url_for('proveedores.proveedor'))
+    
+    listaProveedor=Proveedor.query.all()
+    print(listaProveedor)
+
+    
+    return render_template("proveedor.html",form2=mp_catalogo_form,form=proveedor_form,listaProveedor=listaProveedor,listaIngredientes=listaIngredientes)

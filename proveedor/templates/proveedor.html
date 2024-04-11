@@ -1,0 +1,201 @@
+{% extends "layout2.html" %} 
+{%import "_macros.html" as macros%}
+{%from "_macros.html" import render_field%}
+
+{%block content %}  
+<style>
+    .scrollable-input {
+        max-width: 300px; /* Ancho máximo */
+        max-height: 300px; /* Altura máxima */
+        overflow: auto; /* Desplazamiento */
+    }    
+</style>
+
+<br>
+<div class="container">
+    <div class="row">
+        <!-- Button trigger modal -->
+        <div clas="col-md-12">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Ingresar nuevo proveedor +
+        </button>
+       </div>
+    </div>
+</div>
+    <br>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <form id="formularioProveedor" action="" method="post">
+                            {{form.csrf_token }}
+                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                            
+                                <div class="scrollable-input">
+                                    
+                                    {% for ingrediente in listaIngredientes %}
+                                        {{ macros.input_Form(form['i' ~ ingrediente.idMateriaPrimaCatalogo], class="") }}
+                                    {% endfor %}
+                                </div>
+                                
+                            
+                            
+                       
+                        
+                       
+            
+            
+                    </div>
+                 
+                    
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{macros.input_Form(form.nombreContacto,class="form-control")}}
+                                </div>
+                                <div class="col-md-3">
+                                    {{macros.input_Form(form.telefonoContacto,class="form-control")}}
+                                </div>
+                                <div class="col-md-3">
+                                    {{macros.input_Form(form.razon_social,class="form-control")}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{macros.input_Form(form.direccion,class="form-control")}}
+                                </div>
+                                <div class="col-md-3">
+                                    {{macros.input_Form(form.minimo_compra,class="form-control")}}
+                                </div>
+                                <div class="col-md-3">
+                                    {{macros.input_Form(form.maximo_compra,class="form-control")}}
+                                </div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-md-4">
+                                <br>
+                                <br>
+                                    <button class="btn btn-success" form="formularioProveedor"name="ingresar" type="submit" onclick="" name="btn1">Enviar</button>
+                                    <br>
+                                    <br>
+                                    
+                                </form>
+                                    
+                                </div>
+                                
+                            </div>
+                            
+                            
+                        </div>
+                        
+                       
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                        <form  id="catalogo" action="" method="post" novalidate>
+                           
+                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                        <h3>Agregar nuevo ingrediente al catalogo</h3>
+                        {{macros.input_Form(form2.nombre,class="form-control")}}
+                        
+                        <br>
+                        <br>
+                        <input id="btn-catalogo" class="btn btn-success" name="agregarCatalogo" type="submit" onclick="agregarCatalago()">
+                        </form>
+                    </div>
+                    
+                </div>
+                
+                
+                    
+                    
+            
+            
+            
+                    
+                    
+                    
+                    <div class="row">
+                        
+                    </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="hidden" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-triped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Razon social</th>
+                        <th>Nombre de contacto</th>
+                        <th>Teléfono de contacto</th>
+                        <th>Dirección</th>
+                        <th>Mínimo de compra</th>
+                        <th>Máximo de compra</th>
+                        <th></th>
+                        <th></th>
+                        
+                        
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in listaProveedor %}
+                    <tr>
+                        <td>{{ item.razon_social }}</td>
+                        <td>{{ item.nombreContacto }}</td>
+                        <td>{{ item.telefonoContacto }}</td>
+                        <td>{{ item.direccion }}</td>
+                        
+                        <td>{{ item.compra_minimo }}</td>
+                        <td>{{ item.compra_maxima }}</td>
+                        <td><a class="btn btn-danger">eliminar</a></td>
+                        <td><a class="btn btn-warning">modificar</a></td>
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    
+
+<script>
+    function agregarCatalago(){
+        document.getElementById('catalogo').submit();
+    }
+        
+    
+        
+    
+
+</script>
+
+
+    
+
+
+{%endblock%}
