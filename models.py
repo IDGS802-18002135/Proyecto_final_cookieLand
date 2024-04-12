@@ -58,4 +58,45 @@ class detallesreceta(db.Model):
     def __repr__(self):
         return f'<DetallesReceta {self.idDetallesReceta}>'
     
+class Materiaprima(db.Model):
+    idMateriaPrima=db.Column(db.Integer,primary_key=True)
+    nombreMateriaPrima=db.Column(db.String(50))
+    idProveedor=db.Column(db.Integer)
+    fecha_entrada=db.Column(db.DateTime)
+    
+    caducidad=db.Column(db.DateTime)
+    cantidadExistente=db.Column(db.Integer)
+    tipoUnidad=db.Column(db.String(10))
 
+
+
+
+class Proveedor(db.Model):
+    idProveedor=db.Column(db.Integer,primary_key=True)
+    nombreContacto=db.Column(db.String(50))
+    telefonoContacto=db.Column(db.String(15))
+    razon_social=db.Column(db.String(100))
+    direccion=db.Column(db.String(100))
+    
+
+class ProveedorDao:
+    def _init_(self, idProveedor, nombreContacto, telefonoContacto, razon_social, direccion, compra_minimo=1, compra_maxima=1):
+        self.idProveedor = idProveedor
+        self.nombreContacto = nombreContacto
+        self.telefonoContacto = telefonoContacto
+        self.razon_social = razon_social
+        self.direccion = direccion
+        self.compra_minimo = compra_minimo
+        self.compra_maxima = compra_maxima
+
+class materiaprimacatalogo(db.Model):
+    idMateriaPrimaCatalogo=db.Column(db.Integer,primary_key=True)
+    nombre=db.Column(db.String(50))
+    compra_minimo=db.Column(db.Integer)
+    compra_maxima=db.Column(db.Integer)
+    estatus=db.Column(db.Integer)
+
+class proveedor_materia_prima(db.Model):
+    idProveedor_materia_prima=db.Column(db.Integer,primary_key=True)
+    idProveedor=db.Column(db.Integer)
+    idMateriaPrimaCatalogo=db.Column(db.Integer)
