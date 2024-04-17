@@ -9,7 +9,7 @@ import flask
 from flask import Flask
 from forms import LoginForm
 from flask_login import LoginManager
-from models import usuario,sanitizar,usuario,db
+from models import usuario,sanitizar,usuario,db,administrador,ventas,produccion
 from .forms import RegistroForm
 from flask_wtf.csrf import CSRFProtect
 
@@ -33,6 +33,7 @@ app = Flask(__name__)
 log= Blueprint('log',__name__,template_folder='./templates',)
 
 @log.route("/signup", methods=["GET", "POST"])
+@login_required
 def signup():
     formulario = RegistroForm()
     if request.method == 'POST' and formulario.validate():
@@ -66,62 +67,86 @@ def encriptar(dato):
 @log.route("/login",methods=["GET","POST"])
 
 def login():
-    user=""
-    password=""
-    sanitizar_object=sanitizar()
-    
-   
-    if request.method=="POST":
-      
-        user=sanitizar_object.sanitize_input(request.form["nombreUsuario"])
-      
-        #print(sanitizar_object.sanitize_input("---user"))
-        password=sanitizar_object.sanitize_input(request.form["contrasena"])
-      
-        #print(sanitizar_object.sanitize_input("---password"))
-        lista_usuario=usuario.query.filter(usuario.correo==user,usuario.contrasena == password)
-        
-        
+    try:
         user=""
-        passwordConsultado=""
-        idUsuario=0
-        for item in lista_usuario:
-            
-            user=item.correo
-            passwordConsultado=item.contrasena
-            idUsuario=item.idUsuario
+        password=""
+        sanitizar_object=sanitizar()
         
-        
-
-        if user==None or passwordConsultado==None:
-            print("Usuario no existe")
-            return render_template("login.html")
-        if user==user and check_password_hash(passwordConsultado,password):
     
-
-            user=usuario.query.get(int(idUsuario))
-            print(user.idUsuario)
-            try:
-                login_user(user)
+        if request.method=="POST":
+        
+            user=sanitizar_object.sanitize_input(request.form["nombreUsuario"])
+        
+            #print(sanitizar_object.sanitize_input("---user"))
+            password=sanitizar_object.sanitize_input(request.form["contrasena"])
+        
+            #print(sanitizar_object.sanitize_input("---password"))
+            lista_usuario=usuario.query.filter(usuario.correo==user,usuario.contrasena == password)
+            
+            
+            user=""
+            passwordConsultado=""
+            idUsuario=0
+            for item in lista_usuario:
                 
-                print("Sesión iniciada")
-            except Exception as e:
-                print("Error al iniciar sesión:", e)
+                user=item.correo
+                passwordConsultado=item.contrasena
+                idUsuario=item.idUsuario
+            
+            
 
-           
-            #username=current_user.nombreUsuario
-            #print(current_user.nombreUsuario)
-            #rol=current_user.rol
-            #ultima=current.ultimaConexxion
-            return redirect(url_for("proveedores.proveedor"))# username=username,rol=rol)
-        else:
-            print("Usuario no existe o es invalido")
-            return render_template("login.html")
+            if user==None or passwordConsultado==None:
+                print("Usuario no existe")
+                return render_template("login.html")
+            if user==user and passwordConsultado==password:
         
-        
-    return render_template("login.html")
+
+                user=usuario.query.get(int(idUsuario))
+                print(user.idUsuario)
+                try:
+                    login_user(user)
+                    
+                    print("Sesión iniciada")
+                    flash('Sesión iniciada', 'success')
+                except Exception as e:
+                    print("Error al iniciar sesión:", e)
+
+            
+                #username=current_user.nombreUsuario
+                #print(current_user.nombreUsuario)
+                #rol=current_user.rol
+                #ultima=current.ultimaConexxion
+
+                if ventas().ventas(current_user.idRol):
+                    return redirect(url_for("url para punto de venta"))
+                if produccion().produccion(current_user.idRol):
+                    return redirect(url_for("proveedores.proveedor"))
+                if administrador().administrador(current_user.idRol):
+                    return redirect(url_for("proveedores.proveedor"))
+                else:
+                    return render_template("<h1>No cuenta con un permiso asignado</h1>")
+            else:
+                print("Usuario no existe o es invalido",)
+                flash("Usuario no existe o es invalido","error")
+                return render_template("login.html")
+            
+            
+        return render_template("login.html")
+    except Exception as e:
+                print("Error:", e)
+                flash('Sucedió algo inesperado contacte con el administrador','error')
 
 
 
 
 
+
+
+@log.route("/forbiden",methods=["GET","POST"])
+
+def forbiden():
+    try:
+        return render_template("forbidden.html")
+    except Exception as e:
+                print("Error:", e)
+                flash('Sucedió algo inesperado contacte con el administrador','error')

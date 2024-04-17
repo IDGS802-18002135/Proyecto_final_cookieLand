@@ -1,7 +1,13 @@
-from wtforms import Form
+from wtforms import Form, PasswordField, SubmitField
 from wtforms import StringField, TextAreaField, SelectField,RadioField,EmailField,IntegerField,SelectMultipleField,BooleanField,DateField
 from wtforms import EmailField
 from wtforms import validators
+
+class LoginForm(Form):
+    email = StringField('Email', [validators.DataRequired(message='el campo es requerido'),])
+    password = PasswordField('Password', [validators.DataRequired(message='el campo es requerido'),])
+    remember_me = BooleanField('Recuérdame')
+    submit = SubmitField('Login')
 
 class UserForm(Form):
     id=IntegerField('id')
@@ -38,7 +44,7 @@ class PizzaForm(Form):
                                                 validators=[validators.DataRequired(message='El campo es requerido')])
         
         jamon = BooleanField('Jamon $10', default=False)
-        piña = BooleanField('Piña $10', default=False)
+        piña = BooleanField('Piña $10' , default=False)
         champiñones = BooleanField('Champiñones $10', default=False)
         numeroPizza=IntegerField("Numero de Pizzas",[validators.number_range(min=1, message='valor no valido')])
         fecha = DateField("Fecha", format='%Y-%m-%d', validators=[validators.DataRequired(message='El campo es requerido')])
@@ -46,12 +52,13 @@ class PizzaForm(Form):
 class MateriaPrima(Form):
       nombreMateriaPrima=StringField("nombre: ",[validators.DataRequired(message='el campo es requerido'),
                                     validators.length(min=4,max=50,message='ingresa nombre valido')])
-      proveedor=StringField("proveedor: ",[validators.DataRequired(message='el campo es requerido'),
+      proveedor=SelectField("proveedor: ",
+                                                validators=[validators.DataRequired(message='El campo es requerido'),validators.DataRequired(message='el campo es requerido'),
                                     validators.length(min=4,max=50,message='ingresa proveedor valido')])
       fecha_entrada = DateField("Fecha de entrada: ", format='%Y-%m-%d', validators=[validators.DataRequired(message='El campo es requerido')])
       caducidad = DateField("Fecha de caducidad: ", format='%Y-%m-%d', validators=[validators.DataRequired(message='El campo es requerido')])
       cantidadExistente=IntegerField("Unidades ingresadas:",[validators.number_range(min=1, message='valor no valido')])
-      tipoUnidad=RadioField("Unidad de medida", 
+      tipoUnidad=SelectField("Unidad de medida", 
                                         choices=[('kg','kilogramo (KG)'),('ltr','Litro (ltr)'),('gr','gramos (gr)')],
                                                 validators=[validators.DataRequired(message='El campo es requerido')])
     
@@ -66,6 +73,7 @@ class Proveedor(Form):
                                     validators.length(min=4,max=100,message='ingresa dirección valida')])
       minimo_compra=IntegerField("mínimo de compra",[validators.number_range(min=1, message='valor no valido')])
       maximo_compra=IntegerField("máximo de compra",[validators.number_range(min=1, message='valor no valido')])
+
 
 class ListaProveedor():
         def __init__(self,nombreContacto,telefonoContacto,razon_social,direccion,minimo_compra,maximo_compra):

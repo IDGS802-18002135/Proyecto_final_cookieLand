@@ -1,12 +1,12 @@
 from datetime import date
 from datetime import datetime
-from flask import Flask, request,render_template,Response,redirect,url_for
-from flask_login import login_required
+from flask import Flask, flash, request,render_template,Response,redirect,url_for
+from flask_login import current_user, login_required
 from flask_wtf.csrf import CSRFProtect
 from wtforms import SelectMultipleField,BooleanField
 from .forms import materiaPrimaCatalogo
 from config import DevelopmentConfig
-from models import db
+from models import administrador, db
 from io import open
 from models import Proveedor,Materiaprima,materiaprimacatalogo,proveedor_materia_prima,sanitizar
 
@@ -23,36 +23,53 @@ sanitizar_object=sanitizar()
 @catalogo_mp.route("/catalogo_materia_prima",methods=["GET","POST"])
 @login_required
 def catalogo_materia_prima():
+    try:
+        if administrador().administrador(current_user.idRol):
+        
+        
+            listaCatalogo=""
+            listaCatalogo=materiaprimacatalogo.query.all()
 
-    listaCatalogo=""
-    listaCatalogo=materiaprimacatalogo.query.all()
+            mp_catalogo_form=materiaPrimaCatalogo(request.form)
+            if request.method=='POST'  and mp_catalogo_form.validate() and "ingresarCatalogo" in request.form:
+                nuevo_catalogo=materiaprimacatalogo(
+                    nombre=sanitizar_object.sanitize_input(mp_catalogo_form.nombre.data),
+                    compra_minimo=sanitizar_object.sanitize_input(mp_catalogo_form.minimo_compra.data),
+                    compra_maxima=sanitizar_object.sanitize_input(mp_catalogo_form.maximo_compra.data)
 
-    mp_catalogo_form=materiaPrimaCatalogo(request.form)
-    if request.method=='POST'  and mp_catalogo_form.validate() and "ingresarCatalogo" in request.form:
-        nuevo_catalogo=materiaprimacatalogo(
-            nombre=sanitizar_object.sanitize_input(mp_catalogo_form.nombre.data),
-            compra_minimo=sanitizar_object.sanitize_input(mp_catalogo_form.minimo_compra.data),
-            compra_maxima=sanitizar_object.sanitize_input(mp_catalogo_form.maximo_compra.data)
+                )
+                db.session.add(nuevo_catalogo)
+                db.session.commit()
+                return redirect (url_for('catalogo_mp.catalogo_materia_prima'))
+            return render_template("catalogo_mp.html",form=mp_catalogo_form, listaCatalogo=listaCatalogo)
+        else:
+            return render_template("forbidden.html")
+    except Exception as e:
+                print("Error:", e)
+                flash('Sucedió algo inesperado contacte con el administrador','error')
 
-        )
-        db.session.add(nuevo_catalogo)
-        db.session.commit()
-        return redirect (url_for('catalogo_mp.catalogo_materia_prima'))
-    return render_template("catalogo_mp.html",form=mp_catalogo_form, listaCatalogo=listaCatalogo)
-
+    
 @catalogo_mp.route("/eliminar", methods=["GET","POST"])
+@login_required
 def eliminar():
-    mp_catalogo_form=materiaPrimaCatalogo(request.form)
+    try:    
+        if administrador().administrador(current_user.idRol):
+            mp_catalogo_form=materiaPrimaCatalogo(request.form)
 
-    if request.method=='POST':
-        print("HUUH")
-        print(mp_catalogo_form.id.data)
-        idMateriaPrimaCatalogo=sanitizar_object.sanitize_input(mp_catalogo_form.id.data)
-        mp=materiaprimacatalogo.query.get(idMateriaPrimaCatalogo)
-        mp.estatus=0
-        db.session.commit()
+            if request.method=='POST':
+                print("HUUH")
+                print(mp_catalogo_form.id.data)
+                idMateriaPrimaCatalogo=sanitizar_object.sanitize_input(mp_catalogo_form.id.data)
+                mp=materiaprimacatalogo.query.get(idMateriaPrimaCatalogo)
+                mp.estatus=0
+                db.session.commit()
 
-        return redirect(url_for('catalogo_mp.catalogo_materia_prima'))
-        
-        
-    return render_template('catalogo_materia_prima.html',form=mp_catalogo_form)
+                return redirect(url_for('catalogo_mp.catalogo_materia_prima'))
+                
+                
+            return render_template('catalogo_materia_prima.html',form=mp_catalogo_form)
+        else:
+            return render_template("forbidden.html")
+    except Exception as e:
+                print("Error:", e)
+                flash('Sucedió algo inesperado contacte con el administrador','error')

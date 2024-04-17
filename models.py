@@ -90,3 +90,25 @@ class sanitizar:
         # Aplica la expresión regular para eliminar caracteres no deseados
         sanitized_string = re.sub(regex_pattern, '', input_string)
         return sanitized_string
+    
+
+class administrador:
+    def administrador(self, rol):
+        if rol==1:
+            return True
+        else:
+            return False
+
+class produccion:
+    def produccion(self, rol):
+        if rol==2:
+            return True
+        else:
+            return False
+
+class ventas:
+    def ventas(self, rol):
+        if rol==3:
+            return True
+        else:
+            return False

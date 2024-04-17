@@ -79,18 +79,14 @@
                                 <div class="col-md-3">
                                     {{macros.input_Form(form.direccion,class="form-control")}}
                                 </div>
-                                <div class="col-md-3" class="hidden">
-                                    {{macros.input_Form(form.minimo_compra,class="form-control")}}
-                                </div>
-                                <div class="col-md-3" class="hidden">
-                                    {{macros.input_Form(form.maximo_compra,class="form-control")}}
+                                
                                 </div>
                             </div>  
                             <div class="row">
                                 <div class="col-md-4">
                                 <br>
                                 <br>
-                                    <button class="btn btn-success" form="formularioProveedor"name="ingresar" type="submit" onclick="" name="btn1">Enviar</button>
+                                    <button class="btn btn-success" form="formularioProveedor"name="ingresar" type="submit" >Enviar</button>
                                     <br>
                                     <br>
                                     
@@ -130,8 +126,8 @@
                                     <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
                                 <h3>Agregar nuevo ingrediente al catalogo</h3>
                                 {{macros.input_Form(form2.nombre,class="form-control")}}
-                                {{macros.input_Form(form.minimo_compra,class="form-control")}}
-                                {{macros.input_Form(form.maximo_compra,class="form-control")}}
+                                {{macros.input_Form(form2.minimo_compra,class="form-control")}}
+                                {{macros.input_Form(form2.maximo_compra,class="form-control")}}
                                 
                                 <br>
                                 <br>
