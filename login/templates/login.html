@@ -1,0 +1,41 @@
+{% extends "login_layout.html" %} 
+{%import "_macros.html" as macros%}
+{%from "_macros.html" import render_field%}
+
+{%block content %}  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container vh-100 d-flex justify-content-center align-items-center">
+        <div class="row">
+            <div class="col-md-11 mx-auto" >
+                <div class="card">
+                <div class="card-body">
+                <h1>Login</h1>
+    
+                    <form action="" method="post">
+                        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+                        <label for="email">Email:</label>
+                        <input class="form-control" type="email" name="nombreUsuario" id="email" required>
+                        <label for="password">Password:</label>
+                        <input class="form-control" type="password" name="contrasena" id="password" required>
+                        <button class="btn btn-success" type="submit">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
+
+
+{%endblock%}

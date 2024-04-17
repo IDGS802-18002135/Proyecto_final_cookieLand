@@ -15,7 +15,7 @@
     <div class="row">
 
         <div class="col-md-4">
-            <form  id="catalogo" action="" method="post" novalidate>
+            <form id="catalogo" action="" method="post" >
                            
                 <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
                 <h3>Agregar nuevo ingrediente al catalogo</h3>
@@ -50,13 +50,16 @@
                 <tbody>
                     
                         {% for item in listaCatalogo %}
-                    <tr>
+                        {%if item.estatus==1%}
+                        <tr>
                         <td>{{ item.nombre }}</td>
                         <td>{{ item.compra_minimo }}</td>
                         <td>{{ item.compra_maxima }}</td>
-                        <td><a class="btn btn-danger">eliminar</a></td>
+                        <td><a onclick="eliminar('{{item.idMateriaPrimaCatalogo}}')"  class="btn btn-danger">eliminar</a></td>
                         <td><a class="btn btn-warning">modificar</a></td>
-
+                        {%else%}
+                            
+                        {%endif%}
 
                     </tr>
                     {% endfor %}
@@ -66,13 +69,38 @@
                 </tbody>
             
             </table>
+            <form  class="hidden" id="eliminarCatalogoForm" action="/eliminar" method="post">
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                {{macros.input_Form(form.id, class="form-control",id="idEliminar")}}
+                <input id="eliminar" type="submit" onclick="" name="btn1">
+                
+            </form>
         </div>
         </div>
 
     </div>
 
 </div>
+<script>
+    function agregarCatalago(){
 
+        document.getElementById('catalogo').submit();
+    }
+    
+    function eliminar(id){
+        alert(id)
+
+        document.getElementById('eliminarCatalogoForm').querySelector('[id="idEliminar"]').value = id;
+        
+        document.getElementById('eliminarCatalogoForm').submit();
+        
+        
+    }
+    
+        
+    
+
+</script>
 
 
 

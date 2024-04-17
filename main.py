@@ -1,16 +1,46 @@
 from datetime import date
 from datetime import datetime
-from flask import Flask, request,render_template,Response
+from flask import Flask, redirect, request,render_template,Response, url_for
 from flask_wtf.csrf import CSRFProtect
 import forms
 from config import DevelopmentConfig
 from models import db
 from io import open
-from models import Proveedor
+from models import Proveedor,usuario
+
+from flask import Blueprint
+from proveedor.proveedor import proveedores
+from materiaprima.materiaprima import materia_prima
+from catalogo_materiaprima.catalogo_materia_prima import catalogo_mp
+from login._login import log
+from flask_login import LoginManager, login_required, logout_user
+
 
 app=Flask(__name__)
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)  # donde 'app' es tu aplicación Flask
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    user=usuario.query.get(int(user_id))
+    print(user)
+    return user
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(log.login)
+
 app.config.from_object(DevelopmentConfig)
+app._static_folder="static"
 csrf=CSRFProtect()
+
+
+
 
 
 
@@ -18,47 +48,26 @@ csrf=CSRFProtect()
 def page_not_found(e):
     return render_template('404.html'),404
 
-        
-@app.route("/materiaprima",methods=["GET","POST"])
-def materiaprima():
-    materiaprima_form=forms.MateriaPrima(request.form)
-    if request.method=='POST'  and materiaprima_form.validate:
-        nombreMateriaPrima=materiaprima_form.nombreMateriaPrima.data
-        proveedor=materiaprima_form.proveedor.data
-        fecha_entrada=materiaprima_form.fecha_entrada.data
-        caducidad=materiaprima_form.caducidad.data
-        cantidadExistente=materiaprima_form.cantidadExistente.data
-        tipoUnidad=materiaprima_form.tipoUnidad.data
 
-        
-    return render_template("materiaPrima.html",form=materiaprima_form)
 
-@app.route("/proveedor",methods=["GET","POST"])
-def proveedor():
-    listaProveedor=""
-    proveedor_form=forms.Proveedor(request.form)
-    if request.method=='POST'  and proveedor_form.validate:
 
-        proveedor=Proveedor(
-                            
-                            nombreContacto=proveedor_form.nombreContacto.data,
-                            telefonoContacto=proveedor_form.telefonoContacto.data,
-                            razon_social=proveedor_form.razon_social.data,
-                            direccion=proveedor_form.direccion.data,
-                            compra_minimo=proveedor_form.minimo_compra.data,
-                            compra_maxima=proveedor_form.maximo_compra.data)
-        db.session.add(proveedor)
-        db.session.commit()
-    
-    listaProveedor=Proveedor.query.all()
-    print(listaProveedor)
-    
-    return render_template("proveedor.html",form=proveedor_form,listaProveedor=listaProveedor)
+
+app.register_blueprint(proveedores)
+app.register_blueprint(materia_prima)
+app.register_blueprint(catalogo_mp)
+app.register_blueprint(log)
+
+def status_401(error):
+    return redirect(url_for('log.login'))
+
+
 
 if __name__=="__main__":
     csrf.init_app(app)
     db.init_app(app)
     with app.app_context():
         db.create_all()
+    app.register_error_handler(401, status_401)
+ 
     
     app.run()

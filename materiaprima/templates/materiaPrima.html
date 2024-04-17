@@ -95,15 +95,17 @@
                         <th>Caducidad</th>
                         <th>En existencias</th>
                         <th>Unidad</th>
-                        <th></th>
-                        <th></th>
+                        <th>Eliminar</th>
+                        <th>Modificar</th>
                         
                         
                         
                     </tr>
                 </thead>
                 <tbody>
+                    {%if listaMateriaPrima%}
                     {% for item in listaMateriaPrima%}
+                    
                     <tr>
                         <td>{{ item.nombreMateriaPrima }}</td>
                         <td>{{ item.idProveedor }}</td>
@@ -119,6 +121,9 @@
 
                     </tr>
                     {% endfor %}
+                    {%else%}
+                    <td colspan="9">No se obtuvieron resultados</td>
+                    {%endif%}
                 </tbody>
             </table>
         </div>

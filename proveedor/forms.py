@@ -71,6 +71,9 @@ class ProveedorForms(Form):
 class materiaPrimaCatalogo(Form):
        nombre=StringField("nombre de ingrediente: ",[validators.DataRequired(message='el campo es requerido'),
                                     validators.length(min=4,max=50,message='ingresa nombre valido')])
+       minimo_compra=IntegerField("mínimo de compra",[validators.number_range(min=1, message='valor no valido')])
+       maximo_compra=IntegerField("máximo de compra",[validators.number_range(min=1, message='valor no valido')])
+
       
 
 class ListaProveedor():

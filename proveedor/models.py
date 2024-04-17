@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+import re
 
 
 db=SQLAlchemy()
@@ -43,4 +44,5 @@ class ProveedorDao:
         self.direccion = direccion
         self.compra_minimo = compra_minimo
         self.compra_maxima = compra_maxima
+
 

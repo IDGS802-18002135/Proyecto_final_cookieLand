@@ -1,24 +1,45 @@
 from datetime import date
 from datetime import datetime
 from flask import Flask, request,render_template,Response,redirect,url_for
+from flask_cors import cross_origin
 from flask_wtf.csrf import CSRFProtect
 from wtforms import SelectMultipleField,BooleanField
 from .forms import ProveedorForms,materiaPrimaCatalogo
 from config import DevelopmentConfig
+
+from flask_login import LoginManager, current_user, login_required, logout_user, login_user, login_required, logout_user
+
 from models import db
 from io import open
-from models import Proveedor,Materiaprima,materiaprimacatalogo,proveedor_materia_prima
+from models import Proveedor,Materiaprima,materiaprimacatalogo,proveedor_materia_prima,sanitizar,usuario
 
 from wtforms import validators
 from flask import Blueprint
 app=Flask(__name__)
+
+
+
+
+
 app.config.from_object(DevelopmentConfig)
 csrf=CSRFProtect()
 
+
 proveedores= Blueprint('proveedores',__name__,template_folder='./templates',)
 
+
+
+
 @proveedores.route("/proveedor",methods=["GET","POST"])
+@cross_origin(origins=['http://127.0.0.1'])
+@login_required
 def proveedor():
+   # username=current_user.nombreUsuario
+    #rol=current_user.rol
+
+    mostrarUsuario=current_user.correo
+    print(mostrarUsuario)
+    sanitizar_object=sanitizar()
     listaIngredientes=""
     listaIngredientes=materiaprimacatalogo.query.all()
 
@@ -53,11 +74,16 @@ def proveedor():
     if "agregarCatalogo" in request.form:
         
         
+   
+        
 
 
         
         mpCatalogo=materiaprimacatalogo(
-            nombre=mp_catalogo_form.nombre.data
+            nombre=sanitizar_object.sanitize_input(mp_catalogo_form.nombre.data),
+            compra_minimo=sanitizar_object.sanitize_input(mp_catalogo_form.minimo_compra.data),
+            compra_maxima=sanitizar_object.sanitize_input(mp_catalogo_form.maximo_compra.data)
+
         )
         db.session.add(mpCatalogo)
         db.session.commit()
@@ -70,10 +96,10 @@ def proveedor():
         print("?????????????????")
         proveedor=Proveedor(
                             
-                            nombreContacto=proveedor_form.nombreContacto.data,
-                            telefonoContacto=proveedor_form.telefonoContacto.data,
-                            razon_social=proveedor_form.razon_social.data,
-                            direccion=proveedor_form.direccion.data
+                            nombreContacto=sanitizar_object.sanitize_input(proveedor_form.nombreContacto.data),
+                            telefonoContacto=sanitizar_object.sanitize_input(proveedor_form.telefonoContacto.data),
+                            razon_social=sanitizar_object.sanitize_input(proveedor_form.razon_social.data),
+                            direccion=sanitizar_object.sanitize_input(proveedor_form.direccion.data)
                             
                             )
         #compra_minimo=proveedor_form.minimo_compra.data,
@@ -110,4 +136,7 @@ def proveedor():
     print(listaProveedor)
 
     
-    return render_template("proveedor.html",form2=mp_catalogo_form,form=proveedor_form,listaProveedor=listaProveedor,listaIngredientes=listaIngredientes)
+    return render_template("proveedor.html",form2=mp_catalogo_form,form=proveedor_form,listaProveedor=listaProveedor,listaIngredientes=listaIngredientes)#username=username,rol=rol)
+
+
+

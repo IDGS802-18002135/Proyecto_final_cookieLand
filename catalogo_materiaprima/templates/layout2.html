@@ -5,57 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="/static/jquery/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap-5.3.3/dist/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" href="/static/jquery/datatable/datatables.min.css">
 
-    <link rel="stylesheet" href="static/bootstrap-5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/jquery/datatable/datatables.min.css">
-    <link rel="stylesheet" href="static/sweetalert/dist/sweetalert2.min.css">
-    <script src="static/jquery/jquery-3.7.1.js"></script>
+  
+    <script src="/static/bootstrap-5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
         .tr-head {
             background: #dff0d8;
         }
 
-        .sweetalert-timer-progress-bar {
-            background-color: rgb(46, 204, 113);
-        }
-
-        .sweet-loader {
-            background-color: rgb(46, 204, 113);
-        }
-
         .hidden {
             display: none;
-        }
-
-        .imagen {
-            position: relative;
-            display: inline-block;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            /* Fondo semitransparente */
-            display: none;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-        }
-
-        .imagen:hover .overlay {
-            display: flex;
-        }
-
-        .overlay svg {
-            color: white;
-            /* Color del icono */
-            font-size: 100px;
-            /* Tamaño del icono */
         }
     </style>
 </head>
@@ -64,12 +28,11 @@
 
 
 
-
+    
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="margin-top:-10px;color:white;
-    ">
+     ">
 
-        <div class="container-fluid"
-            style=" background:linear-gradient(rgb(41, 128, 185),rgba(208, 211, 212));padding-top:-100px;">
+        <div class="container-fluid" style="background-color:rgb(41, 128, 185);padding-top:-100px;">
             <a class="navbar-brand" href="/"><img src="../static/bootstrap/img/cookieland.png" width="80"
                     alt="cookieland"><b style="font-size:xx-large;">Cookie Land</b></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
@@ -80,20 +43,16 @@
                 <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 200px;">
 
                     <li class="nav-item">
-                        <a class="nav-link icon-link-hover" href="#"
-                            style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                class="bi bi-bag-heart" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd"
-                                    d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0M14 14V5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1M8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132" />
-                            </svg>
+                        <a class="nav-link" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-bag-heart" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0M14 14V5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1M8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>
+                              </svg>
                         </a>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle icon-link-hover" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false"
-                            style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-boxes" viewBox="0 0 16 16">
                                 <path
@@ -109,9 +68,8 @@
 
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle icon-link-hover" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false"
-                            style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-people" viewBox="0 0 16 16">
                                 <path
@@ -129,12 +87,13 @@
                 <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn " style="background: rgb(46, 204, 113);" type="submit"><b>Search</b></button>
-                </form>
+                  </form>
 
             </div>
         </div>
     </nav>
 
+        
     <div>
         {%with message =get_flashed_messages()%}
         {%if messages%}
@@ -153,18 +112,7 @@
         {%endblock%}
     </div>
 
-    <script src="static/sweetalert/dist/sweetalert2.all.min.js"></script>
-    <script src="static/jquery/datatable/datatables.min.js"></script>
 
-    <script src="static/bootstrap-5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-        });
-    </script>
 
 </body>
 

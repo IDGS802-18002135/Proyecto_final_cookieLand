@@ -1,13 +1,14 @@
 from datetime import date
 from datetime import datetime
 from flask import Flask, request,render_template,Response,redirect,url_for
+from flask_login import login_required
 from flask_wtf.csrf import CSRFProtect
 from .forms import MateriaPrima
 from config import DevelopmentConfig
 from models import db
 from io import open
 from models import Proveedor,materiaprimacatalogo
-from models import Materiaprima
+from models import Materiaprima,sanitizar
 from flask import Blueprint
 
 app=Flask(__name__)
@@ -15,8 +16,9 @@ app.config.from_object(DevelopmentConfig)
 csrf=CSRFProtect()
 
 materia_prima= Blueprint('materia_prima',__name__,template_folder='./templates',)
-
+sanitizar_object=sanitizar()
 @materia_prima.route("/materiaprima",methods=["GET","POST"])
+@login_required
 def materiaprima():
     
 
@@ -52,13 +54,13 @@ def materiaprima():
     if request.method=='POST'  and materiaprima_form.validate:
         
         mp=Materiaprima(
-            nombreMateriaPrima=materiaprima_form.nombreMateriaPrima.data,
-            idProveedor=materiaprima_form.proveedor.data,
-            fecha_entrada=materiaprima_form.fecha_entrada.data,
+            nombreMateriaPrima=sanitizar_object.sanitize_input(materiaprima_form.nombreMateriaPrima.data),
+            idProveedor=sanitizar_object.sanitize_input(materiaprima_form.proveedor.data),
+            fecha_entrada=sanitizar_object.sanitize_input(materiaprima_form.fecha_entrada.data),
             
-            caducidad=materiaprima_form.caducidad.data,
-            cantidadExistente=materiaprima_form.cantidadExistente.data,
-            tipoUnidad=materiaprima_form.tipoUnidad.data
+            caducidad=sanitizar_object.sanitize_input(materiaprima_form.caducidad.data),
+            cantidadExistente=sanitizar_object.sanitize_input(materiaprima_form.cantidadExistente.data),
+            tipoUnidad=sanitizar_object.sanitize_input(materiaprima_form.tipoUnidad.data)
         )
         db.session.add(mp)
         db.session.commit()

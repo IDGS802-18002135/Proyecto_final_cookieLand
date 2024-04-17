@@ -12,6 +12,11 @@
 </style>
 
 <br>
+<p>
+    
+<h1>{{username}}</h1>
+<h1>{{rol}}</h1>
+
 <div class="container">
     <div class="row">
         <!-- Button trigger modal -->
@@ -44,6 +49,7 @@
                                     
                                     {% for ingrediente in listaIngredientes %}
                                         {{ macros.input_Form(form['i' ~ ingrediente.idMateriaPrimaCatalogo], class="") }}
+                                        
                                     {% endfor %}
                                 </div>
                                 
@@ -73,10 +79,10 @@
                                 <div class="col-md-3">
                                     {{macros.input_Form(form.direccion,class="form-control")}}
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="hidden">
                                     {{macros.input_Form(form.minimo_compra,class="form-control")}}
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="hidden">
                                     {{macros.input_Form(form.maximo_compra,class="form-control")}}
                                 </div>
                             </div>  
@@ -103,19 +109,40 @@
                 <br>
                 <br>
                 <br>
+
                 <div class="row">
-                    <div class="col-md-3">
-                        <form  id="catalogo" action="" method="post" novalidate>
-                           
-                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-                        <h3>Agregar nuevo ingrediente al catalogo</h3>
-                        {{macros.input_Form(form2.nombre,class="form-control")}}
+                    
+                  
+                
+                    
+
+
+                    <button style="width:250px; height:40px" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        Agregar producto al catalogo
+                      </button>
+                      <br>
+                      <br>
+                      <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <div class="col-md-3">
+                                <form  id="catalogo" action="" method="post" >
+                                   
+                                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                                <h3>Agregar nuevo ingrediente al catalogo</h3>
+                                {{macros.input_Form(form2.nombre,class="form-control")}}
+                                {{macros.input_Form(form.minimo_compra,class="form-control")}}
+                                {{macros.input_Form(form.maximo_compra,class="form-control")}}
+                                
+                                <br>
+                                <br>
+                                <input id="btn-catalogo" class="btn btn-success" name="agregarCatalogo" type="submit" onclick="">
+                                </form>
+                            </div>
+                        </div>
+                      </div>
                         
-                        <br>
-                        <br>
-                        <input id="btn-catalogo" class="btn btn-success" name="agregarCatalogo" type="submit" onclick="agregarCatalago()">
-                        </form>
-                    </div>
+                    
+                </div>   
                     
                 </div>
                 
@@ -133,10 +160,7 @@
                     </div>
             </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="hidden" class="btn btn-primary">Save changes</button>
-        </div>
+       
       </div>
     </div>
   </div>
@@ -151,16 +175,17 @@
                         <th>Nombre de contacto</th>
                         <th>Teléfono de contacto</th>
                         <th>Dirección</th>
-                        <th>Mínimo de compra</th>
-                        <th>Máximo de compra</th>
-                        <th></th>
-                        <th></th>
+                        <th class="hidden">Mínimo de compra</th>
+                        <th class="hidden">Máximo de compra</th>
+                        <th>Eliminar</th>
+                        <th>Modificar</th>
                         
                         
                         
                     </tr>
                 </thead>
                 <tbody>
+                    
                     {% for item in listaProveedor %}
                     <tr>
                         <td>{{ item.razon_social }}</td>
@@ -168,14 +193,15 @@
                         <td>{{ item.telefonoContacto }}</td>
                         <td>{{ item.direccion }}</td>
                         
-                        <td>{{ item.compra_minimo }}</td>
-                        <td>{{ item.compra_maxima }}</td>
+                        <td class="hidden">{{ item.compra_minimo }}</td>
+                        <td class="hidden">{{ item.compra_maxima }}</td>
                         <td><a class="btn btn-danger">eliminar</a></td>
                         <td><a class="btn btn-warning">modificar</a></td>
 
 
                     </tr>
                     {% endfor %}
+                    
                 </tbody>
             </table>
         </div>
@@ -185,6 +211,7 @@
 
 <script>
     function agregarCatalago(){
+
         document.getElementById('catalogo').submit();
     }
         

@@ -1,0 +1,62 @@
+{% extends "layout2.html" %} 
+{%from "_macros.html" import input_Form%}
+
+{%block content %}  
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center mb-4">Registro de Usuario</h1>
+            <form method="POST"class="registro was-validated" id="registro" action="/signup">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">  
+                <div class="form-floating">
+                    {{ input_Form(form.nombre) }}
+                  
+                </div>
+                <div class="form-floating">
+                    {{ input_Form(form.app) }}
+                </div>
+                <div class="form-floating">
+                    {{ input_Form(form.apm) }}
+                </div>
+                <div class="form-floating">
+                    {{ input_Form(form.email) }}
+                </div>
+                <div class="form-floating">
+                    {{ input_Form(form.password) }}
+                    
+                </div>
+                <div class="form-check form-switch">
+                    {{form.mostrar_password(class="form-check-input",role="switch", onchange="togglePassword();",placeholder="Mostrar contraseña")}}
+                    {{form.mostrar_password.label("Mostrar contraseña", class="form-check-label")}}
+                    
+                </div>
+                <div class="form-floating">
+                    {{ input_Form(form.confirmar_password) }}
+                </div>
+                <div class="form-floating">
+                    {{ input_Form(form.estatus) }}
+                   
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function togglePassword() {
+        var passwordInput = document.getElementById("password");
+        var mostrarPasswordCheckbox = document.getElementById("mostrar_password");
+
+        if (mostrarPasswordCheckbox.checked) {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+
+
+    const forms = document.querySelectorAll('.needs-validation')
+
+   
+</script>
+{%endblock%}
