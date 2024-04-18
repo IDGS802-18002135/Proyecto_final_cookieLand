@@ -1,0 +1,83 @@
+    {%extends "layout2.html" %}
+    {%import "_macros.html" as macros%}
+    {%block content %}
+
+    <div class="container">
+        <table id="usuarios">
+            <thead>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Estus</th>
+                <th>Acciones</th>
+
+            </thead>
+            <tbody>
+                {%for datos_usuarios in lista%}
+                <tr>
+                    <td>{{datos_usuarios.nombreUsuario}}{{datos_usuarios.apellidoPaterno}}{{datos_usuarios.apellidoMaterno}}</td>
+                    <td>{{datos_usuarios.correo}}</td>
+                    <td>{{datos_usuarios.idRol}}</td>
+                    {%if datos_usuarios.estatus == "1" %}
+                    <td>Activo</td>
+                    <td>
+                        <form action="/desactive_user"  method="POST">
+                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                            <input type="hidden" name="idUsuario" value="{{datos_usuarios.idUsuario}}">
+                            <button  class="btn btn-danger">Desactivar</button>
+                        </form>
+                        <form action="/editar_usuario"  method="POST">
+                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                            <input type="hidden" name="idUsuario" value="{{datos_usuarios.idUsuario}}">
+                            <button  class="btn btn-info">Modificar</button>
+                        </form>
+                    </td>
+                    {%else%}
+                    <td>Inactivo</td>
+                    <td>
+                        <form action="/active_user"  method="POST">
+                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                            <input type="hidden" name="idUsuario" value="{{datos_usuarios.idUsuario}}">
+                            <button  class="btn btn-success">Activar</button>
+                        </form>
+                        <form action="/editar_usuario"  method="POST">
+                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                            <input type="hidden" name="idUsuario" value="{{datos_usuarios.idUsuario}}">
+                            <button  class="btn btn-info">Modificar</button>
+                        </form>
+                    </td>
+                    {%endif%}
+                    
+
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <script>
+            $(document).ready(function () {
+                alert("{{message}}", "{{category}}","");
+            });
+        </script>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <script>
+        $(document).ready(function(){
+            $("#usuarios").dataTable({
+                dom: 'PBfplirtlip',
+                
+                language: { url: '../static/json/TablesEsp.json' },
+                responsive: true,
+                pagingType: "full_numbers"
+
+            }
+
+            )
+        });
+    </script>
+    <script src="../../static/alert.js"></script>
+    {% endblock %}

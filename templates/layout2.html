@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
     <link rel="stylesheet" href="static/bootstrap-5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/jquery/datatable/datatables.min.css">
     <link rel="stylesheet" href="static/sweetalert/dist/sweetalert2.min.css">
@@ -24,9 +23,20 @@
             background-color: rgb(46, 204, 113);
         }
 
+        .selected {
+            background-color: aqua;
+        }
+
+
+
+
         .hidden {
             display: none;
         }
+
+
+
+
 
         .imagen {
             position: relative;
@@ -57,7 +67,12 @@
             font-size: 100px;
             /* Tamaño del icono */
         }
+
+        #list {
+            font-size: 14px;
+        }
     </style>
+
 </head>
 
 <body>
@@ -70,7 +85,7 @@
 
         <div class="container-fluid"
             style=" background:linear-gradient(rgb(41, 128, 185),rgba(208, 211, 212));padding-top:-100px;">
-            <a class="navbar-brand" href="/"><img src="../static/bootstrap/img/cookieland.png" width="80"
+            <a class="navbar-brand" href="/puntoDeVenta"><img src="../static/bootstrap/img/cookieland.png" width="80"
                     alt="cookieland"><b style="font-size:xx-large;">Cookie Land</b></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +116,9 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu" style="background:rgb(41, 128, 185) ;">
-                            <li><a class="dropdown-item" href="/d">Materia Prima</a></li>
+                            <li><a class="dropdown-item" href="/materiaprima">Materia Prima</a></li>
+                            <li><a class="dropdown-item" href="/catalogo_materia_prima">Materia prima catalogo</a></li>
+
                             <li><a class="dropdown-item" href="#">Ventas</a></li>
 
                         </ul>
@@ -119,17 +136,20 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu" style="background:rgb(41, 128, 185) ;">
-                            <li><a class="dropdown-item" href="#">Proveedores</a></li>
-                            <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                            <li><a class="dropdown-item" href="/proveedor">Proveedores</a></li>
+                            <li><a class="dropdown-item" href="/signup">Registro de Usuarios</a></li>
+                            <li><a class="dropdown-item" href="/usuarios">Usuarios</a></li>
 
                         </ul>
                     </li>
 
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn " style="background: rgb(46, 204, 113);" type="submit"><b>Search</b></button>
-                </form>
+                 <ul class="d-flex">
+                    <form action="/logout" id="logout">
+                        <button class="btn" style="background: #41c97c;">Cerrar sesion</button>
+                    </form>
+                    
+                </ul> 
 
             </div>
         </div>

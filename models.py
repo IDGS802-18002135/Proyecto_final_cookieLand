@@ -1,3 +1,5 @@
+import re
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 
@@ -100,3 +102,44 @@ class proveedor_materia_prima(db.Model):
     idProveedor_materia_prima=db.Column(db.Integer,primary_key=True)
     idProveedor=db.Column(db.Integer)
     idMateriaPrimaCatalogo=db.Column(db.Integer)
+    
+class usuario(db.Model,UserMixin):
+    __tablename__ = 'usuario'
+    idUsuario=db.Column(db.Integer,primary_key=True)
+    nombreUsuario=db.Column(db.String(20))
+    apellidoPaterno=db.Column(db.String(20))
+    apellidoMaterno=db.Column(db.String(20))
+    correo =db.Column(db.String(50))
+    contrasena =db.Column(db.String(250))
+    idRol =db.Column(db.Integer,default=1)
+    estatus=db.Column(db.String(5))
+    logs = db.relationship('logslogin', backref='usuario')
+    def get_id(self):
+        return self.idUsuario
+    
+class logslogin(db.Model):
+    idLog = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.idUsuario'), nullable=False)
+    accion = db.Column(db.String(250))
+    detalle = db.Column(db.String(250))
+    fecha = db.Column(db.Date)    
+class HistorialContrasenas(db.Model):
+    __tablename__ = 'historial_contrasenas'
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.idUsuario'), nullable=False)
+    contrasena = db.Column(db.String(250), nullable=False)
+    fecha_creacion = db.Column(db.DateTime, nullable=False)
+ 
+
+
+      
+
+class sanitizar:
+    def sanitize_input(self,input_string):
+        # Define una expresión regular para encontrar solo caracteres alfanuméricos y espacios
+        regex_pattern = re.compile(r'[^.@a-zA-Z0-9\s]')
+
+        # Aplica la expresión regular para eliminar caracteres no deseados
+        sanitized_string = re.sub(regex_pattern, '', input_string)
+        return sanitized_string

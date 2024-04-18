@@ -1,0 +1,38 @@
+{% extends "layout2.html" %} 
+{%from "_macros.html" import input_Form%}
+
+{%block content %}  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container vh-100 d-flex justify-content-center align-items-center">
+        <div class="row">
+            <div class="col-md-11 mx-auto" >
+                <div class="card">
+                <div class="card-body">
+                <h1>Login</h1>
+    
+                    <form action="/login" method="post" was-validated>
+                        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                        {{ input_Form(form.email) }}
+                        {{ input_Form(form.password) }}
+                      
+                        <button class="btn btn-success" type="submit">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
+
+
+{%endblock%}

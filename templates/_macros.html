@@ -1,16 +1,75 @@
 {%macro datos(name,placeholder,type="text")%}
-<p><input name="{{name}}" placeholder="{{placeholder}}"  type="{{type}}"></p>
+<input name="{{name}}" placeholder="{{placeholder}}"  type="{{type}}">
 {%endmacro%}
 
 
-{%macro input_Form(field)%}
-    <td>{{field.label}}</td>
-    <dd>{{field(**kwargs)|safe}}</dd>
-{%if field.errors%}
-<ul>
-    {%for error in field.errors%}
-    <li style="color:red">{{error}}</li>{%endfor%}
-</ul>
-{%endif%}
+{% macro checkbox(field) %}
+<div class="form-check form-switch">
+    {{ field(class="form-check-input",role="switch"|safe) }}
+    <label class="form-check-label" for="{{field.id}}">{{field.label}}</label>
+</div>
+{% endmacro %}
 
-{%endmacro%}
+{% macro input_Form_id(field, id="") %}
+<div class="form-floating">
+    {{ field(class="form-control", placeholder=field.label.text, id=id)|safe }}
+    <label class="form-label" for="{{ id }}">{{ field.label.text }}</label>
+</div>
+{% if field.errors %}
+    <ul>
+        {% for error in field.errors %}
+            <li style="color:red">{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endmacro %}
+
+
+
+{% macro input_Form_valor_dfl(field, valor="") %}
+<div class="form-floating">
+    {{ field(class="form-control", value=valor, placeholder=field.label.text)|safe }}
+    <label class="form-label" for="{{ field.id }}">{{ field.label.text }}</label>
+</div>
+{% if field.errors %}
+    <ul>
+        {% for error in field.errors %}
+            <li style="color:red">{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endmacro %}
+
+{% macro input_Form_valor_dfl_select(field, valor="") %}
+    <div class="form-floating">
+        <select class="form-select" id="{{ field.id }}" name="{{ field.name }}">
+            {% for choice in field.choices %}
+                {% set selected = (choice[0] == valor) %}
+                <option value="{{ choice[0] }}" {% if selected %}selected{% endif %}>{{ choice[1] }}</option>
+            {% endfor %}
+        </select>
+        <label class="form-label" for="{{ field.id }}">{{ field.label.text }}</label>
+    </div>
+    {% if field.errors %}
+        <ul>
+            {% for error in field.errors %}
+                <li style="color:red">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro input_Form(field) %}
+<div class="form-floating">
+    {{ field(class="form-control",   placeholder="{{ field.label }}")|safe }}
+    <label class="form-label" for="{{ field.id }}">{{ field.label }}</label>
+    </div>
+    {% if field.errors %}
+        <ul>
+            {% for error in field.errors %}
+                <li style="color:red">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,144 @@
+{% extends "layout2.html" %} 
+{%import "_macros.html" as macros%}
+{%from "_macros.html" import render_field%}
+{%block content %}  
+
+
+
+    <!-- Button trigger modal -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Ingresar materia prima
+                </button>
+              
+            </div>
+
+        </div>
+    </div>
+    <br>
+    
+    
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container">
+            
+                <form id="formularioMateriaPrima"action="" method="post">
+                    {{form.csrf_token }}
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                    
+                <div class="row">
+                    <div class="col-md-4">
+                        {{macros.input_Form(form.nombreMateriaPrima)}}
+                    </div>
+                    <div class="col-md-4">
+                        {{macros.input_Form(form.proveedor)}}
+                    </div>
+                    
+
+                    
+                    <div class="col-md-4">
+                        {{macros.input_Form(form.fecha_entrada)}}
+                    </div>
+                </div>        
+                <div class="row">
+                    <div class="col-md-4">
+                        {{macros.input_Form(form.caducidad)}}
+                    </div>
+                    <div class="col-md-4">
+                        {{macros.input_Form(form.tipoUnidad)}}
+                    </div>
+                    
+                    <div class="col-md-4">
+                        {{macros.input_Form(form.cantidadExistente)}}
+                    </div>
+                    
+                    
+                </div>
+                    
+            
+                    
+            
+                    
+                <input class="btn btn-success" name="ingresar" type="submit" onclick="" name="btn1">                    
+                    
+                </form>                
+
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="hidden" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-triped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Proveedor</th>
+                        <th>Fecha de entrada</th>
+                        <th>Fecha de salida</th>
+                        <th>Caducidad</th>
+                        <th>En existencias</th>
+                        <th>Unidad</th>
+                        <th>Eliminar</th>
+                        <th>Modificar</th>
+                        
+                        
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {%if listaMateriaPrima%}
+                    {% for item in listaMateriaPrima%}
+                    
+                    <tr>
+                        <td>{{ item.nombreMateriaPrima }}</td>
+                        <td>{{ item.idProveedor }}</td>
+                        <td>{{ item.fecha_entrada }}</td>
+                        <td>{{ item.fecha_salida }}</td>
+                        
+                        <td>{{ item.caducidad }}</td>
+                        <td>{{ item.cantidadExistente }}</td>
+                        <td>{{ item.tipoUnidad }}</td>
+                        <td><a class="btn btn-danger">eliminar</a></td>
+                        <td><a class="btn btn-warning">modificar</a></td>
+
+
+                    </tr>
+                    {% endfor %}
+                    {%else%}
+                    <td colspan="9">No se obtuvieron resultados</td>
+                    {%endif%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+        
+
+        
+                
+
+
+
+
+
+
+{%endblock%}

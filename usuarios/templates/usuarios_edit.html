@@ -1,0 +1,40 @@
+{% extends "layout2.html" %}
+{% import "_macros.html" as macro %}
+{% block content %}
+
+<div class="container">
+    {% if usuario %}
+        <form action="/actualizar_usuario" method="POST">
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+            <input type="hidden" name="idUsuario" value="{{usuario.idUsuario}}">
+            {{ macro.input_Form_valor_dfl(form.nombre,usuario.nombreUsuario) }}
+            {{ macro.input_Form_valor_dfl(form.app,usuario.apellidoPaterno) }}
+            {{ macro.input_Form_valor_dfl(form.apm,usuario.apellidoMaterno) }}
+            {{ macro.input_Form_valor_dfl(form.email,usuario.correo) }}
+            {{ macro.input_Form_valor_dfl(form.password,usuario.contrasena) }}
+            {{ macro.input_Form_valor_dfl(form.confirmar_password,usuario.contrasena) }}
+            {{ macro.input_Form_valor_dfl_select(form.estatus,usuario.estatus) }}
+            <div class="form-group">
+                <button class="btn btn-success">Actualizar usuario</button>
+
+            </div>
+        </form>
+        
+    {% endif %}
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <script>
+                $(document).ready(function () {
+                    alert("{{ message }}", "{{ category }}", "");
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<script src="{{ url_for('static', filename='alert.js') }}"></script>
+{% endblock %}
